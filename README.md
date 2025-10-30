@@ -46,11 +46,14 @@ Aqui ficam os screenshots pedidos nas atividades, todos estão na pasta `/entreg
 ![Spring Initializr](entregaveis/screenshot-spring-initializr.png)
 
 ### Atividade 3 (Commit Inicial)
-*Adicione aqui o screenshot do commit inicial depois que fizer o push.*
+![Commit Inicial](entregaveis/screenshot-commit-inicial.png)
+
 ### Atividade 4 (Estrutura de Pastas)
 *Adicione aqui o screenshot da estrutura de pastas.*
+
 ### Atividade 5 (Endpoint)
 *Adicione aqui o screenshot do endpoint /health ou /info funcionando.*
+
 ## [cite_start]Desenvolvedor [cite: 196]
 [cite_start] Yasmin Aline Amaral dos Santos
 [cite_start]*Desenvolvido com JDK 21 e Spring Boot 3.2.x* [cite: 198]
