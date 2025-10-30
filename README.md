@@ -40,19 +40,33 @@ Desenvolvido com JDK 21 e Spring Boot 3.2.x
 ## Entregáveis (Screenshots)
 *Esta seção é para os entregáveis das Atividades 1-5.*
 
-**Atividade 1: Ambiente (Java 21, VSCode, Git)**
-![Java e Git](entregaveis/screenshot-java-e-git-funcionando-terminal.png)
-![Extensões VSCode](entregaveis/screenshot-extensoes-vscode.png)
+# Atividade 1: Ambiente (Java 21, Git e Extensões do VSCode)
 
-**Atividade 2: Spring Initializr (Java 21 selecionado)**
+## Java e Git funcionando
+![](entregaveis/screenshot-java-e-git-funcionando-terminal.png)
+
+---
+## Extensões VSCode
+
+![](entregaveis/screenshot-extensoes-vscode.png)
+
+---
+
+# Atividade 2: Spring Initializr (Java 21 selecionado)
 ![Spring Initializr](entregaveis/screenshot-spring-initializr.png)
 Obs: Arquivo ZIP do projeto baixado do Spring Initializr está no diretório de entregáveis.
 
-**Atividade 3: Commit Inicial no GitHub**
+---
+
+# Atividade 3: Commit Inicial no GitHub
 ![Commit Inicial](entregaveis/screenshot-commit-inicial.png)
 
-**Atividade 4: Estrutura de Pastas**
+---
+
+# Atividade 4: Estrutura de Pastas
 ![Estrutura de pastas do projeto](entregaveis/screenshot-estrutura-de-pastas-do-projeto.png)
 
-**Atividade 5: Endpoint Funcionando**
+---
+
+# Atividade 5: Endpoint Funcionando
 ![Endpoint Funcionando](entregaveis/screenshot-endpoint-health-funcionando.png)
