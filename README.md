@@ -35,16 +35,16 @@ Profile: development
 *Esta seção é para os entregáveis das Atividades 1-5.*
 
 **Atividade 1: Ambiente (Java 21, VSCode, Git)**
-![Java e Git](entregaveis/seu-screenshot-java-git.png)
-![Extensões VSCode](entregaveis/seu-screenshot-vscode.png)
+![Java e Git](entregaveis/screenshot-java-e-git-funcionando-terminal.png)
+![Extensões VSCode](entregaveis/screenshot-extensoes-vscode.png)
 
 **Atividade 2: Spring Initializr (Java 21 selecionado)**
-![Spring Initializr](entregaveis/seu-screenshot-spring-initializr.png)
+![Spring Initializr](entregaveis/screenshot-spring-initializr.png)
 
 Obs: Arquivo ZIP do projeto baixado do Spring Initializr está no diretório de entregáveis.
 
 **Atividade 3: Commit Inicial no GitHub**
-![Commit Inicial](entregaveis/seu-screenshot-commit-inicial.png)
+![Commit Inicial](entregaveis/screenshot-commit-inicial.png)
 
 **Atividade 4: Estrutura de Pastas**
 ![Estrutura de pastas do projeto](entregaveis/screenshot-estrutura-de-pastas-do-projeto.png)
