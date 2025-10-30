@@ -36,6 +36,7 @@ Profile: development
 
 **Atividade 1: Ambiente (Java 21, VSCode, Git)**
 ![Java e Git](entregaveis/screenshot-java-e-git-funcionando-terminal.png)
+
 ![Extensões VSCode](entregaveis/screenshot-extensoes-vscode.png)
 
 **Atividade 2: Spring Initializr (Java 21 selecionado)**
