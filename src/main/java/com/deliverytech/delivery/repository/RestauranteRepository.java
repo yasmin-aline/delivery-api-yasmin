@@ -20,4 +20,10 @@ public interface RestauranteRepository extends JpaRepository<Restaurante, Long> 
 
     // Buscar ativos e ordenar por avaliação
     List<Restaurante> findByAtivoTrueOrderByAvaliacaoDesc();
+
+    // Buscar por taxa de entrega menor ou igual (taxa)
+    List<Restaurante> findByTaxaEntregaLessThanEqual(java.math.BigDecimal taxa);
+
+    //  Order by nome asc dos restaurantes
+    List<Restaurante> findTop5ByOrderByNomeAsc();
 }
