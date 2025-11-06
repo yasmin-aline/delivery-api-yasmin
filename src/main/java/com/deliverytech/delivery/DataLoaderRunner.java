@@ -18,7 +18,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Component
+//@Component
 public class DataLoaderRunner implements CommandLineRunner {
 
     private static final Logger logger = LoggerFactory.getLogger(DataLoaderRunner.class);

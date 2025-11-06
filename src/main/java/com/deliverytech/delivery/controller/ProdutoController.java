@@ -1,85 +1,73 @@
 package com.deliverytech.delivery.controller;
 
+import com.deliverytech.delivery.dto.ProdutoDTO;
 import com.deliverytech.delivery.entity.Produto;
 import com.deliverytech.delivery.service.ProdutoService;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
-@RequestMapping("/produtos")
 @CrossOrigin(origins = "*")
 public class ProdutoController {
 
     @Autowired
     private ProdutoService produtoService;
 
-    /**
-     * Cadastrar novo produto
-     */
-    @PostMapping
-    public ResponseEntity<?> cadastrar(@RequestBody Produto produto) {
+    @PostMapping("/api/produtos")
+    public ResponseEntity<?> cadastrar(@Valid @RequestBody ProdutoDTO dto) {
         try {
-            // Extrai o ID do restaurante do objeto produto
-            if (produto.getRestaurante() == null || produto.getRestaurante().getId() == null) {
-                throw new IllegalArgumentException("Restaurante ID é obrigatório para cadastrar um produto");
-            }
-            Long restauranteId = produto.getRestaurante().getId();
-            Produto produtoSalvo = produtoService.cadastrar(produto, restauranteId);
+            Produto produtoSalvo = produtoService.cadastrarProduto(dto);
             return ResponseEntity.status(HttpStatus.CREATED).body(produtoSalvo);
-        } catch (IllegalArgumentException e) {
+        } catch (EntityNotFoundException | IllegalArgumentException e) {
             return ResponseEntity.badRequest().body("Erro: " + e.getMessage());
         }
     }
 
-    /**
-     * Listar produtos por restaurante
-     */
-    @GetMapping
-    public ResponseEntity<List<Produto>> listarPorRestaurante(@RequestParam Long restauranteId) {
-        return ResponseEntity.ok(produtoService.listarPorRestaurante(restauranteId));
-    }
-
-    /**
-     * Buscar produto por ID
-     */
-    @GetMapping("/{id}")
-    public ResponseEntity<Produto> buscarPorId(@PathVariable Long id) {
-        Optional<Produto> produto = produtoService.buscarPorId(id);
-        if (produto.isPresent()) {
-            return ResponseEntity.ok(produto.get());
-        } else {
+    @GetMapping("/api/produtos/{id}")
+    public ResponseEntity<?> buscarPorId(@PathVariable Long id) {
+        try {
+            Produto produto = produtoService.buscarProdutoPorId(id);
+            return ResponseEntity.ok(produto);
+        } catch (EntityNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
     }
 
-    /**
-     * Atualizar produto
-     */
-    @PutMapping("/{id}")
-    public ResponseEntity<?> atualizar(@PathVariable Long id, @RequestBody Produto produto) {
+    @GetMapping("/api/restaurantes/{restauranteld}/produtos")
+    public ResponseEntity<List<Produto>> buscarPorRestaurante(@PathVariable Long restauranteld) {
+        return ResponseEntity.ok(produtoService.buscarProdutosPorRestaurante(restauranteld));
+    }
+
+    @PutMapping("/api/produtos/{id}")
+    public ResponseEntity<?> atualizar(@PathVariable Long id, @Valid @RequestBody ProdutoDTO dto) {
         try {
-            Produto produtoAtualizado = produtoService.atualizar(id, produto);
+            Produto produtoAtualizado = produtoService.atualizarProduto(id, dto);
             return ResponseEntity.ok(produtoAtualizado);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body("Erro: " + e.getMessage());
         }
     }
 
-    /**
-     * Deletar produto
-     */
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deletar(@PathVariable Long id) {
+    @PatchMapping("/api/produtos/{id}/disponibilidade")
+    public ResponseEntity<?> alterarDisponibilidade(@PathVariable Long id, @RequestParam boolean disponivel) {
         try {
-            produtoService.deletar(id);
-            return ResponseEntity.ok().body("Produto deletado com sucesso");
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body("Erro: " + e.getMessage());
+            Produto produto = produtoService.alterarDisponibilidade(id, disponivel);
+            return ResponseEntity.ok(produto);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping("/api/produtos/categoria/{categoria}")
+    public ResponseEntity<List<Produto>> buscarPorCategoria(@PathVariable String categoria) {
+        return ResponseEntity.ok(produtoService.buscarProdutosPorCategoria(categoria));
     }
 }
