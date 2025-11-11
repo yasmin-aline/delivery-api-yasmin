@@ -31,4 +31,6 @@ public class Restaurante {
     private BigDecimal avaliacao;
 
     private Boolean ativo;
+
+    private Integer tempoEntrega;
 }

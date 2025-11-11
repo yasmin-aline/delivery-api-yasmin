@@ -15,5 +15,6 @@ public interface PedidoService {
     Pedido atualizarStatusPedido(Long id, String status);
     BigDecimal calcularTotalPedido(List<ItemPedidoDTO> itens);
     Pedido cancelarPedido(Long id);
-
+    List<Pedido> buscarPedidosPorRestaurante(Long restauranteId);
+    List<Pedido> buscarPedidosFiltrados(String status, java.time.LocalDateTime inicio, java.time.LocalDateTime fim);
 }

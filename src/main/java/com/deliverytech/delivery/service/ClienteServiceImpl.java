@@ -2,8 +2,9 @@ package com.deliverytech.delivery.service;
 
 import com.deliverytech.delivery.dto.ClienteDTO;
 import com.deliverytech.delivery.entity.Cliente;
+import com.deliverytech.delivery.exception.ConflictException;
+import com.deliverytech.delivery.exception.EntityNotFoundException;
 import com.deliverytech.delivery.repository.ClienteRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,14 +27,11 @@ public class ClienteServiceImpl implements ClienteService {
     @Transactional
     public Cliente cadastrarCliente(ClienteDTO dto) {
         if (clienteRepository.existsByEmail(dto.getEmail())) {
-            throw new IllegalArgumentException("Email já cadastrado: " + dto.getEmail());
+            throw new ConflictException("Email já cadastrado: " + dto.getEmail());
         }
-
         Cliente cliente = modelMapper.map(dto, Cliente.class);
-
         cliente.setAtivo(true);
         cliente.setDataCadastro(LocalDateTime.now());
-
         return clienteRepository.save(cliente);
     }
 
@@ -47,21 +45,18 @@ public class ClienteServiceImpl implements ClienteService {
     @Override
     @Transactional(readOnly = true)
     public Optional<Cliente> buscarClientePorEmail(String email) {
-        return clienteRepository.findByEmail(email); //
+        return clienteRepository.findByEmail(email);
     }
 
     @Override
     @Transactional
     public Cliente atualizarCliente(Long id, ClienteDTO dto) {
         Cliente cliente = buscarClientePorId(id);
-
         if (!cliente.getEmail().equals(dto.getEmail()) && clienteRepository.existsByEmail(dto.getEmail())) {
-            throw new IllegalArgumentException("Email já cadastrado: " + dto.getEmail());
+            throw new ConflictException("Email já cadastrado: " + dto.getEmail());
         }
-
         modelMapper.map(dto, cliente);
         cliente.setId(id);
-
         return clienteRepository.save(cliente);
     }
 
@@ -69,15 +64,13 @@ public class ClienteServiceImpl implements ClienteService {
     @Transactional
     public Cliente ativarDesativarCliente(Long id) {
         Cliente cliente = buscarClientePorId(id);
-
         cliente.setAtivo(!cliente.getAtivo());
-
         return clienteRepository.save(cliente);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<Cliente> listarClientesAtivos() {
-        return clienteRepository.findByAtivoTrue(); //
+        return clienteRepository.findByAtivoTrue();
     }
 }

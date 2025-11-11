@@ -36,8 +36,8 @@ public class DataLoaderRunner implements CommandLineRunner {
     public void run(String... args) throws Exception {
 
         // Populando Restaurantes
-        Restaurante r1 = new Restaurante(null, "Pizzaria da Ana", "Pizza", "Rua A, 10", "1111-1111", new BigDecimal("5.00"), new BigDecimal("4.5"), true);
-        Restaurante r2 = new Restaurante(null, "Burger do Bruno", "Lanche", "Rua B, 20", "2222-2222", new BigDecimal("3.50"), new BigDecimal("4.2"), true);
+        Restaurante r1 = new Restaurante(null, "Pizzaria da Ana", "Pizza", "Rua A, 10", "1111-1111", new BigDecimal("5.00"), new BigDecimal("4.5"), true,1);
+        Restaurante r2 = new Restaurante(null, "Burger do Bruno", "Lanche", "Rua B, 20", "2222-2222", new BigDecimal("3.50"), new BigDecimal("4.2"), true,1);
         restauranteRepository.saveAll(List.of(r1, r2));
         logger.info("Restaurantes salvos.");
 

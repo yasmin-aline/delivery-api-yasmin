@@ -40,4 +40,6 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
             "FROM Pedido p " +
             "GROUP BY p.restaurante.nome")
     List<RelatorioVendasRestaurante> findTotalVendasPorRestaurante();
+
+    List<Pedido> findByStatusAndDataPedidoBetween(String status, java.time.LocalDateTime inicio, java.time.LocalDateTime fim);
 }

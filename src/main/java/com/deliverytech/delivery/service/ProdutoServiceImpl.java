@@ -3,8 +3,8 @@ package com.deliverytech.delivery.service;
 import com.deliverytech.delivery.dto.ProdutoDTO;
 import com.deliverytech.delivery.entity.Produto;
 import com.deliverytech.delivery.entity.Restaurante;
+import com.deliverytech.delivery.exception.EntityNotFoundException;
 import com.deliverytech.delivery.repository.ProdutoRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,14 +28,11 @@ public class ProdutoServiceImpl implements ProdutoService {
     @Transactional
     public Produto cadastrarProduto(ProdutoDTO dto) {
         Restaurante restaurante = restauranteService.buscarRestaurantePorId(dto.getRestauranteId());
-
         Produto produto = modelMapper.map(dto, Produto.class);
         produto.setRestaurante(restaurante);
-
         if (produto.getDisponivel() == null) {
             produto.setDisponivel(true);
         }
-
         return produtoRepository.save(produto);
     }
 
@@ -57,11 +54,9 @@ public class ProdutoServiceImpl implements ProdutoService {
     public Produto atualizarProduto(Long id, ProdutoDTO dto) {
         Produto produto = buscarProdutoPorId(id);
         Restaurante restaurante = restauranteService.buscarRestaurantePorId(dto.getRestauranteId());
-
         modelMapper.map(dto, produto);
         produto.setId(id);
         produto.setRestaurante(restaurante);
-
         return produtoRepository.save(produto);
     }
 
@@ -77,5 +72,18 @@ public class ProdutoServiceImpl implements ProdutoService {
     @Transactional(readOnly = true)
     public List<Produto> buscarProdutosPorCategoria(String categoria) {
         return produtoRepository.findByCategoriaContainingIgnoreCase(categoria);
+    }
+
+    @Override
+    @Transactional
+    public void removerProduto(Long id) {
+        Produto produto = buscarProdutoPorId(id);
+        produtoRepository.delete(produto);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Produto> buscarProdutosPorNome(String nome) {
+        return produtoRepository.findByNomeContainingIgnoreCase(nome);
     }
 }

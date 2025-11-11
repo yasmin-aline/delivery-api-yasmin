@@ -6,8 +6,9 @@ import com.deliverytech.delivery.entity.Cliente;
 import com.deliverytech.delivery.entity.Pedido;
 import com.deliverytech.delivery.entity.Produto;
 import com.deliverytech.delivery.entity.Restaurante;
+import com.deliverytech.delivery.exception.BusinessException;
+import com.deliverytech.delivery.exception.EntityNotFoundException;
 import com.deliverytech.delivery.repository.PedidoRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,15 +36,14 @@ public class PedidoServiceImpl implements PedidoService {
     @Override
     @Transactional
     public Pedido criarPedido(PedidoDTO dto) {
-
         Cliente cliente = clienteService.buscarClientePorId(dto.getClienteId());
         if (!cliente.getAtivo()) {
-            throw new IllegalArgumentException("Cliente " + cliente.getNome() + " não está ativo.");
+            throw new BusinessException("Cliente " + cliente.getNome() + " não está ativo.");
         }
 
         Restaurante restaurante = restauranteService.buscarRestaurantePorId(dto.getRestauranteId());
         if (!restaurante.getAtivo()) {
-            throw new IllegalArgumentException("Restaurante " + restaurante.getNome() + " não está ativo.");
+            throw new BusinessException("Restaurante " + restaurante.getNome() + " não está ativo.");
         }
 
         BigDecimal valorTotal = BigDecimal.ZERO;
@@ -51,18 +51,15 @@ public class PedidoServiceImpl implements PedidoService {
 
         for (ItemPedidoDTO itemDto : dto.getItens()) {
             Produto produto = produtoService.buscarProdutoPorId(itemDto.getProdutoId());
-
             if (!produto.getDisponivel()) {
-                throw new IllegalArgumentException("Produto " + produto.getNome() + " não está disponível.");
+                throw new BusinessException("Produto " + produto.getNome() + " não está disponível.");
             }
-
             if (!produto.getRestaurante().getId().equals(restaurante.getId())) {
-                throw new IllegalArgumentException("Produto " + produto.getNome() + " não pertence ao restaurante " + restaurante.getNome());
+                throw new BusinessException("Produto " + produto.getNome() + " não pertence ao restaurante " + restaurante.getNome());
             }
 
             BigDecimal subtotalItem = produto.getPreco().multiply(BigDecimal.valueOf(itemDto.getQuantidade()));
             valorTotal = valorTotal.add(subtotalItem);
-
             itensDescricao.append(String.format("%dx %s; ", itemDto.getQuantidade(), produto.getNome()));
         }
 
@@ -98,11 +95,9 @@ public class PedidoServiceImpl implements PedidoService {
     @Transactional
     public Pedido atualizarStatusPedido(Long id, String status) {
         Pedido pedido = buscarPedidoPorId(id);
-
         if (pedido.getStatus().equals("ENTREGUE") || pedido.getStatus().equals("CANCELADO")) {
-            throw new IllegalArgumentException("Não é possível alterar o status de um pedido que já foi " + pedido.getStatus());
+            throw new BusinessException("Não é possível alterar o status de um pedido que já foi " + pedido.getStatus());
         }
-
         pedido.setStatus(status.toUpperCase());
         return pedidoRepository.save(pedido);
     }
@@ -115,7 +110,7 @@ public class PedidoServiceImpl implements PedidoService {
             pedido.setStatus("CANCELADO");
             return pedidoRepository.save(pedido);
         } else {
-            throw new IllegalArgumentException("Não é possível cancelar um pedido com status " + pedido.getStatus());
+            throw new BusinessException("Não é possível cancelar um pedido com status " + pedido.getStatus());
         }
     }
 
@@ -129,5 +124,26 @@ public class PedidoServiceImpl implements PedidoService {
             valorTotal = valorTotal.add(subtotalItem);
         }
         return valorTotal;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Pedido> buscarPedidosPorRestaurante(Long restauranteId) {
+        return pedidoRepository.findByRestauranteId(restauranteId);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Pedido> buscarPedidosFiltrados(String status, LocalDateTime inicio, LocalDateTime fim) {
+        if (status != null && inicio != null && fim != null) {
+            return pedidoRepository.findByStatusAndDataPedidoBetween(status, inicio, fim);
+        }
+        if (status != null) {
+            return pedidoRepository.findByStatus(status);
+        }
+        if (inicio != null && fim != null) {
+            return pedidoRepository.findByDataPedidoBetween(inicio, fim);
+        }
+        return pedidoRepository.findAll();
     }
 }
